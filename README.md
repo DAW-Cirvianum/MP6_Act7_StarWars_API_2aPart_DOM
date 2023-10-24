@@ -152,7 +152,7 @@ Implementar una funció anomenada `listMovies()` que retorni una promesa que es 
 ]
 ```
 
-### Exercici 3 (1 punt)
+### Exercici 3
 
 Implementar una funció anomenada `listMoviesSorted()` que retorna una promesa que es resol amb un array que conté els títols de les pel·lícules ordenats alfabèticament (per títol) juntament amb la informació del director, data de llançament i Id d'episodi.
 
