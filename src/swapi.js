@@ -17,7 +17,21 @@ const BASE_URL = 'https://swapi.dev/api/';
 async function _getSwapiData(path) {
   try {
     const res = await fetch(`${BASE_URL}${path}`);
-    if (!res.ok) throw new Error('HTTP error, status = ' + res.status);
+    if (!res.ok) {
+      throw new Error('Error obtenint pel·lícules del servidor');
+    }
+    return await res.json();
+  } catch (err) {
+    console.log('Error >>> Error obtenint pel·lícules del servidor', err);
+  }
+}
+
+async function _getSwapiData2(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error('Error obtenint pel·lícules del servidor');
+    }
     return await res.json();
   } catch (err) {
     console.log('Error >>> Error obtenint pel·lícules del servidor', err);
@@ -28,6 +42,8 @@ async function getMovieCount() {
   const data = await _getSwapiData('films/');
   return data.count;
 }
+
+//getMovieCount().then((data) => console.log(data));
 
 // A vegades veureu també la lògica amb response.ok:
 // export async function getSwapiData(path) {
@@ -118,6 +134,8 @@ async function getMovieInfo(id) {
   };
 }
 
+// getMovieInfo('4').then((data) => console.log(data));
+
 /* // Opció 1 - FILTER + MAP
 async function getMovieInfo(id) {
   // Assegurem-nos que l'ID serà un número
@@ -179,13 +197,17 @@ getMovieInfo2('4').then((data) => console.log(data));
 // retorni una promesa que es resol amb el nom del personatge.
 
 async function getCharacterName(url) {
-  //Podem assegurar-nos que la petició es farà amb https://
-  url = url.replace('http://', 'https://');
+  // Podem assegurar-nos que la petició es farà amb https://
+  //url = url.replace('http://', 'https://');
   // Fem la petició a la API
-  const res = await _getSwapiData(url);
-  // Retornem el nom del personatge
-  return res.name;
+  const character = await _getSwapiData(url);
 }
+
+/* getCharacterName('https://swapi.dev/api/people/1/').then((data) =>
+  console.log(data)
+); */
+
+// 5.3 getMovieCharacters(id: string)
 
 // 5.3 getMovieCharacters(id: string)
 
@@ -198,12 +220,16 @@ async function getMovieCharacters(id) {
   return movie;
 }
 
+getMovieCharacters('4').then((data) => console.log(data));
+
 //I en aquesta funció implementem el nostre "array de Promeses" amb Promise.all
 //I podem aprofitar l'anterior funció que ens permet resoldre URL --> Nom del Personatge
 async function _getCharacterNames(movie) {
   return Promise.all(
-    movie.characters.map((url) => {
-      getCharacterName(url);
+    movie.characters.map(async (url) => {
+      //fem la petició a la API
+      const character = await _getSwapiData2(url);
+      return character.name;
     })
   );
 }
@@ -220,6 +246,8 @@ async function getMovieCharactersAndHomeworlds(id) {
   movie.characters = await _getCharacterNamesAndHomeWorlds(movie);
   return movie;
 }
+
+//getMovieCharactersAndHomeworlds('4').then((data) => console.log(data));
 
 async function _getCharacterNamesAndHomeWorlds(movie) {
   // Ara he de fer el que abans feia únicament amb personatges, també amb

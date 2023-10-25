@@ -64,17 +64,16 @@ export async function listMovies() {
 
 // EXERCICI 3 - listMoviesSorted()
 
-// Retorna un array amb els objectes vistos a l'exercici 2 ordenat alfabèticament d'acord amb el títol de la peli
+// Retorna un array amb ordenat alfabèticament (títol) junt amb la informació de l'ex3
 
-export async function listMoviesSorted() {
+async function listMoviesSorted() {
   const data = await listMovies();
-  console.log(data);
   return data.sort((valorA, valorB) => {
     return valorA.name < valorB.name ? -1 : valorA.name > valorB.name ? 1 : 0;
   });
 }
 
-listMoviesSorted().then((data) => console.log(data));
+//listMoviesSorted().then((data) => console.log(data));
 
 // No podem fer ús de resta per comparar en aquest cas.
 
@@ -82,16 +81,56 @@ listMoviesSorted().then((data) => console.log(data));
 // Retorna un array d'objectes (films) ordenatas per l'element episodi + únicament parells (2, 4, 6...)
 
 // 1. Torno a necessitar el llistat de pelis d'abans. D'aquí podré filtrar en base a ID parell.
-// 2. Aplico el sort(). 
+// 2. Aplico el sort().
 
-function _esParell(valor) {
-  return valor % 2 == 0;
+async function listEvenMoviesSorted() {
+  const movies = await listMovies();
+  // Filtrem els episodis parells
+  const moviesFiltered = movies.filter((movie) => movie.episodeID % 2 === 0);
+  // Ordenem en base a aquests IDs
+  return moviesFiltered.sort((a, b) => a.episodeID - b.episodeID);
 }
 
-async function listEvenMovieSorted{
-  const newList = await listMovies();
+// listEvenMoviesSorted().then((data) => console.log(data));
 
-  const filteredMovies = newList.filter((film)=>{
-    return _esParell(film.episodeID);
-  })
+// // EXERCICI 5
+// // 5.1
+//Implementar una funció getMovieInfo(id: string) que donat un id
+// d'una pel·lícula, ens retorni una promesa que es resol amb un objecte que conté:name, episodeID, characters.
+
+// Opció Òptima - Fent ús de funcions anteriors.
+
+async function getMovieInfo(id) {
+  const movie = await _getSwapiData(`films/${id}`);
+  return {
+    characters: movie.characters,
+    episodeID: movie.episode_id,
+    name: movie.title,
+  };
+}
+
+//getMovieInfo('4').then((data) => console.log(data));
+
+// // 5.2 GetCharacterName(URL: string)
+
+// Implementar una funció getCharacterName(url: string) que donada una URL d'un personatge
+// retorni una promesa que es resol amb el nom del personatge.
+
+async function getCharacterName(url) {
+  const character = await _getSwapiData(url);
+  return character.name;
+}
+
+getCharacterName('/people/3').then((data) => console.log(data));
+
+// 5.3 getMovieCharacters(id: string)
+
+async function _getCharacterNames(movie) {
+  return Promise.all(
+    movie.characters.map(async (url) => {
+      const path = url.split('api')[1];
+      const data = await _getSwapiData(path);
+      return data.name;
+    })
+  );
 }
