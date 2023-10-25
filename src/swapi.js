@@ -85,16 +85,6 @@ async function listMoviesSorted() {
 
 //listMoviesSorted().then((data) => console.log(data));
 
-// Aneu afegint les functions a exportar aquí
-
-const swapi = {
-  getMovieCount,
-  listMovies,
-  listMoviesSorted,
-};
-
-export default swapi;
-
 // EXERCICI 4
 // Implementar una funció anomenada listEvenMoviesSorted() que retorna una
 // promesa que es resol amb un array d'objectes Film ordenats per episodeID de
@@ -219,4 +209,46 @@ async function _getCharacterNames(movie) {
 }
 
 // // EXERCICI 6 - getMovieCharactersAndHomeworld(id: string)
-// En aquest cas
+// En aquest cas afegim també el planeta d'origen del personatge a l'array de characters
+// que ja teníem a l'exercici anterior.
+// { "name": "Luke Skywalker", "homeworld": "Tatooine" },
+
+async function getMovieCharactersAndHomeworlds(id) {
+  // Recupero la info de la peli
+  const movie = await getMovieInfo(id);
+  // Ara necessito canviar la info dels personatges perquè en comptes de tenir la URL
+  movie.characters = await _getCharacterNamesAndHomeWorlds(movie);
+  return movie;
+}
+
+async function _getCharacterNamesAndHomeWorlds(movie) {
+  // Ara he de fer el que abans feia únicament amb personatges, també amb
+  // el planeta d'origen del personatge
+  const charactersWithHomeWorld = await Promise.all(
+    movie.characters.map((url) => _getCharacterNameAndHomeworld(url))
+  );
+}
+
+async function _getCharacterNameAndHomeworld(url) {
+  url = url.replace('http://', 'https://');
+  const data = _getSwapiData(url);
+  const character = { name: data.name, homeworld: data.homeworld };
+  character.homeworld = await _getHomeWorldName(character.homeworld);
+  return character;
+}
+
+async function _getHomeWorldName(url) {
+  url = url.replace('http://', 'https://');
+  const planet = await _getSwapiData(url);
+  return planet.name;
+}
+
+// Aneu afegint les functions a exportar aquí
+
+const swapi = {
+  getMovieCount,
+  listMovies,
+  listMoviesSorted,
+};
+
+export default swapi;
