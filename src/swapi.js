@@ -17,21 +17,16 @@ const BASE_URL = 'https://swapi.dev/api/';
 async function _getSwapiData(path) {
   try {
     const res = await fetch(`${BASE_URL}${path}`);
-    if (!res.ok) {
-      throw new Error('Error obtenint pel·lícules del servidor');
-    }
     return await res.json();
   } catch (err) {
     console.log('Error >>> Error obtenint pel·lícules del servidor', err);
   }
 }
 
-async function _getSwapiData2(url) {
+async function _getSwapiData2(path) {
   try {
-    const res = await fetch(url);
-    if (!res.ok) {
-      throw new Error('Error obtenint pel·lícules del servidor');
-    }
+    console.log(path);
+    const res = await fetch(path);
     return await res.json();
   } catch (err) {
     console.log('Error >>> Error obtenint pel·lícules del servidor', err);
@@ -88,7 +83,7 @@ async function listMovies() {
 
 async function listMoviesSorted() {
   const data = await listMovies();
-  console.log(data);
+  //console.log(data);
   return data.sort((valorA, valorB) => {
     return valorA.name < valorB.name ? -1 : valorA.name > valorB.name ? 1 : 0;
   });
@@ -98,8 +93,6 @@ async function listMoviesSorted() {
 // "The Empire Strikes Back" - "A New Hope" --> NaN
 // Però si podem fer ús dels operadors de comparació:
 // "The Empire Strikes Back" > "A New Hope" --> false
-
-//listMoviesSorted().then((data) => console.log(data));
 
 // EXERCICI 4
 // Implementar una funció anomenada listEvenMoviesSorted() que retorna una
@@ -201,6 +194,7 @@ async function getCharacterName(url) {
   //url = url.replace('http://', 'https://');
   // Fem la petició a la API
   const character = await _getSwapiData(url);
+  return character.name;
 }
 
 /* getCharacterName('https://swapi.dev/api/people/1/').then((data) =>
@@ -214,16 +208,17 @@ async function getCharacterName(url) {
 async function getMovieCharacters(id) {
   // Fem la petició a la API
   const movie = await getMovieInfo(id);
-  // Substituïm les url dels personatges pel seu Nom. Podem crear-nos una auxiliar
+  // Substituïm les url dels personatges pel seu Nom. Podem crear-nos una funció auxiliar
+  // per fer-ho
   movie.characters = await _getCharacterNames(movie);
   // Retornem el nom del personatge
   return movie;
 }
 
-getMovieCharacters('4').then((data) => console.log(data));
+//getMovieCharacters('4').then((data) => console.log(data));
 
-//I en aquesta funció implementem el nostre "array de Promeses" amb Promise.all
-//I podem aprofitar l'anterior funció que ens permet resoldre URL --> Nom del Personatge
+//I en aquesta funció implementem el nostre "array de Promeses" amb Promise.all que retornarà
+//l'array de noms de personatges només un cop els hagi finalitzats tots.
 async function _getCharacterNames(movie) {
   return Promise.all(
     movie.characters.map(async (url) => {
@@ -240,34 +235,44 @@ async function _getCharacterNames(movie) {
 // { "name": "Luke Skywalker", "homeworld": "Tatooine" },
 
 async function getMovieCharactersAndHomeworlds(id) {
-  // Recupero la info de la peli
+  // Recupero la info de la peli d'acord amb un ID
   const movie = await getMovieInfo(id);
   // Ara necessito canviar la info dels personatges perquè en comptes de tenir la URL
+  // del personatge, tinc la URL únicament.
+  // Em genero una funció auxiliar:
   movie.characters = await _getCharacterNamesAndHomeWorlds(movie);
   return movie;
 }
 
-//getMovieCharactersAndHomeworlds('4').then((data) => console.log(data));
+getMovieCharactersAndHomeworlds('2').then((data) => console.log(data));
 
+// Aquesta funciío auxiliar s'encarregarà de mapejar totes les URL i fer la crida a la API.
+// Tinc la funció parcialment implementada. Em falta retornar també els planetes!!!
+// Anem a gestionar primer l'accés a l'array de personatges i les múltiples promeses que es generen
 async function _getCharacterNamesAndHomeWorlds(movie) {
-  // Ara he de fer el que abans feia únicament amb personatges, també amb
-  // el planeta d'origen del personatge
   const charactersWithHomeWorld = await Promise.all(
-    movie.characters.map((url) => _getCharacterNameAndHomeworld(url))
+    movie.characters.map((peopleURL) =>
+      _getCharacterNameAndHomeworld(peopleURL)
+    )
   );
+  return charactersWithHomeWorld;
 }
 
-async function _getCharacterNameAndHomeworld(url) {
-  url = url.replace('http://', 'https://');
-  const data = _getSwapiData(url);
+async function _getCharacterNameAndHomeworld(peopleURL) {
+  //url = url.replace('http://', 'https://');
+  const data = await _getSwapiData2(peopleURL);
+  if (!data) {
+    return null;
+  }
   const character = { name: data.name, homeworld: data.homeworld };
+  //console.log(character);
   character.homeworld = await _getHomeWorldName(character.homeworld);
   return character;
 }
 
-async function _getHomeWorldName(url) {
-  url = url.replace('http://', 'https://');
-  const planet = await _getSwapiData(url);
+async function _getHomeWorldName(planetURL) {
+  const planet = await _getSwapiData2(planetURL);
+  //console.log(planet.name);
   return planet.name;
 }
 
