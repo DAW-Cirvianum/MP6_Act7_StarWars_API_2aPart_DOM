@@ -294,11 +294,44 @@ const getValues = async () => {
 
 ### Exercici 6
 
-Implementar una funció anomenada `getMovieCharactersAndHomeworlds(id: string)` que retorna una promesa que es resol amb un objecte que conté, tan sols, els següents atributs públics:
+Implementa la funció `getMovieCharactersAndHomeworlds(id: string)`
 
-- `episodeID: Number`, conjté el camp episode_id.
-- `name: String` indicant el títol de la pel·lícula.
-- `characters: Un array que conté informació sobre els personatges que surten a la pel·lícula.
+Una funció que retorna una Promesa que es resol amb un objecte que conté els següents atributs públics:
+
+- `episodeID: Number` - Representa el camp episode_id.
+- `name: String` - Indica el títol de la pel·lícula.
+- `characters: Array` - Conté informació sobre els personatges que apareixen a la pel·lícula.
+  - `name: String` - Nom del personatge.
+  - `homeworld: String` - Nom del planeta on va néixer el personatge.
+
+**Exemple de l'objecte retornat una vegada s'ha resolt la Promesa:**
+
+````json
+{
+  "episodeID": 4,
+  "name": "A New Hope",
+  "characters": [
+    { "name": "Luke Skywalker", "homeworld": "Tatooine" },
+    { "name": "C-3PO", "homeworld": "Tatooine" },
+    { "name": "R2-D2", "homeworld": "Naboo" },
+    { "name": "Darth Vader", "homeworld": "Tatooine" },
+    { "name": "Leia Organa", "homeworld": "Alderaan" },
+    { "name": "Owen Lars", "homeworld": "Tatooine" },
+    { "name": "Beru Whitesun Lars", "homeworld": "Tatooine" },
+    { "name": "R5-D4", "homeworld": "Tatooine" },
+    { "name": "Biggs Darklighter", "homeworld": "Tatooine" },
+    { "name": "Obi-Wan Kenobi", "homeworld": "Stewjon" },
+    { "name": "Wilhuff Tarkin", "homeworld": "Eriadu" },
+    { "name": "Chewbacca", "homeworld": "Kashyyyk" },
+    { "name": "Han Solo", "homeworld": "Corellia" },
+    { "name": "Greedo", "homeworld": "Rodia" },
+    { "name": "Jabba Desilijic Tiure", "homeworld": "Nal Hutta" },
+    { "name": "Wedge Antilles", "homeworld": "Corellia" },
+    { "name": "Jek Tono Porkins", "homeworld": "Bestine IV" },
+    { "name": "Raymus Antilles", "homeworld": "Alderaan" }
+  ]
+}
+
 
 ### Exercici 7
 
@@ -309,7 +342,7 @@ async function createMovie(id) {
   const movie = await getMovieInfo(id);
   return new Movie(movie.name, movie.characters);
 }
-```
+````
 
 Implementar la classe Movie amb els els següents mètodes i atributs:
 
