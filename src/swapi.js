@@ -219,4 +219,4 @@ async function _getCharacterNames(movie) {
 }
 
 // // EXERCICI 6 - getMovieCharactersAndHomeworld(id: string)
-//
+// En aquest cas

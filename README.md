@@ -306,7 +306,7 @@ Una funció que retorna una Promesa que es resol amb un objecte que conté els s
 
 **Exemple de l'objecte retornat una vegada s'ha resolt la Promesa:**
 
-````json
+```javascript
 {
   "episodeID": 4,
   "name": "A New Hope",
@@ -331,7 +331,7 @@ Una funció que retorna una Promesa que es resol amb un objecte que conté els s
     { "name": "Raymus Antilles", "homeworld": "Alderaan" }
   ]
 }
-
+```
 
 ### Exercici 7
 
@@ -342,7 +342,7 @@ async function createMovie(id) {
   const movie = await getMovieInfo(id);
   return new Movie(movie.name, movie.characters);
 }
-````
+```
 
 Implementar la classe Movie amb els els següents mètodes i atributs:
 
