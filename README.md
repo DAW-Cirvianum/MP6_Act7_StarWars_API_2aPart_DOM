@@ -300,6 +300,42 @@ Implementar una funció anomenada `getMovieCharactersAndHomeworlds(id: string)` 
 - `name: String` indicant el títol de la pel·lícula.
 - `characters: Un array que conté informació sobre els personatges que surten a la pel·lícula.
 
+### Exercici 7
+
+Donada la funció createMovie(id: string) que es defineix a continuació:
+
+```javascript
+async function createMovie(id) {
+  const movie = await getMovieInfo(id);
+  return new Movie(movie.name, movie.characters);
+}
+```
+
+Implementar la classe Movie amb els els següents mètodes i atributs:
+
+- name: String indicant el títol de la pel·lícula.
+- getCharacters(): Funció asíncrona que es resol amb una matriu de noms dels
+  personatges que surten a la pel·lícula.
+- getHomeworlds(): Funció asíncrona que es resol amb un array que conté tan sols els noms
+  dels planetes on van néixer els personatges que apareixen a la pel·lícula.
+- getHomeworldsReverse(): Funció asíncrona que es resol amb un array que conté els noms
+  dels planetes on van néixer els personatges, ordenats en ordre alfabètic invers
+
+### Exercici 8
+
+En els anteriors exercicis no s'ha considerat el control d'errors o una fallada a la crida a l'API de StarWars. Atès que l'API és un servei extern, hi ha la possibilitat que al trucar a un endpoint aquest no
+retorni informació, no respongui o llanci un error. Donada la següent funció:
+
+```javascript
+async function createMovie(id) {
+  const movie = await getMovieInfo(id);
+  return movie;
+}
+```
+
+Implementar la comprovació o comprovacions necessàries per tal de gestionar possibles errors i
+explicar el perquè d’aquestes comprovacions.
+
 # Enhorabona!
 
 En la propera pràctica practicarem amb el DOM per mostrar totes aquestes dades a l'usuari amb una interfície gràfica com aquesta:
