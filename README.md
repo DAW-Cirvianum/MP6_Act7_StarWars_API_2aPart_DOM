@@ -335,7 +335,7 @@ Una funció que retorna una Promesa que es resol amb un objecte que conté els s
 
 ### Exercici 7
 
-Donada la funció createMovie(id: string) que es defineix a continuació:
+Donada la funció **createMovie(id: string)** que es defineix a continuació:
 
 ```javascript
 async function createMovie(id) {

@@ -25,7 +25,6 @@ async function _getSwapiData(path) {
 
 async function _getSwapiData2(path) {
   try {
-    console.log(path);
     const res = await fetch(path);
     return await res.json();
   } catch (err) {
@@ -244,7 +243,7 @@ async function getMovieCharactersAndHomeworlds(id) {
   return movie;
 }
 
-getMovieCharactersAndHomeworlds('2').then((data) => console.log(data));
+//getMovieCharactersAndHomeworlds('2').then((data) => console.log(data));
 
 // Aquesta funciío auxiliar s'encarregarà de mapejar totes les URL i fer la crida a la API.
 // Tinc la funció parcialment implementada. Em falta retornar també els planetes!!!
@@ -285,3 +284,65 @@ const swapi = {
 };
 
 export default swapi;
+
+// // EXERCICI 7 - createMovie(id:string)
+
+// Anem a implementar una classe Movie que ens permeti crear instàncies de pel·lícules
+// name
+// getCharacters()
+// getHomeworlds()
+// getHomeWorldsReverse()
+
+async function createMovie(id) {
+  const movie = await getMovieInfo(id);
+  return new Movie(movie.name, movie.characters);
+}
+
+export class Movie {
+  // No ens diu que "characters" sigui una propietat de la classe Movie, però si que ens diu que
+  // tindrem un mètode getCharacters() que retornarà els personatges de la peli.
+  // Podem establir una propietat privada:
+  #characters;
+
+  constructor(name, characters) {
+    this.name = name;
+    this.#characters = characters;
+  }
+
+  //getCharacters() --> retorna els noms dels personatges en un array.
+  async getCharacters() {
+    return Promise.all(this.#characters.map((url) => getCharacterName(url)));
+  }
+
+  //getHomeworlds() --> retorna els noms dels planetes en un array.
+
+  //No tenim accés a les URL dels planetes d'entrada.
+  //Però tenim la funció auxiliar _getCharacterNameAndWorld, que donada la URL
+  //d'un personatge, ens retorna la info del nom i el homeworld en format:
+  //{ name: data.name, homeworld: data.homeworld }
+  async getHomeworlds() {
+    const namesAndHomeworlds = await Promise.all(
+      this.#characters.map((url) => _getCharacterNameAndHomeworld(url))
+    );
+    // Ara amb un nou map, podem retornar únicament la part que ens interessa,
+    // els noms!
+    //console.log(namesAndHomeworlds);
+    const homeworlds = namesAndHomeworlds.map((data) => data.homeworld);
+    // TIP! El "Set" és un tipus d'array que ens assegura que no tindrà elements
+    // duplicats en el seu array. Cada cop que afegim elements, automàticament
+    // ell verifica que no hi hagi repeticions.
+    //console.log(homeworlds);
+    const uniqueHomeworlds = new Set(homeworlds);
+    return Array.from(uniqueHomeworlds);
+  }
+
+  async getHomeworldsReverse() {
+    const homeworlds = await this.getHomeworlds();
+    return homeworlds.sort().reverse();
+  }
+}
+
+createMovie(4).then((movie) => {
+  movie.getHomeworlds().then((data) => console.log(data));
+  movie.getHomeworldsReverse().then((data) => console.log(data));
+});
