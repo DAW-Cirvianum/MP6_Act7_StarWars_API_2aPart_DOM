@@ -275,13 +275,6 @@ async function _getHomeWorldName(planetURL) {
   return planet.name;
 }
 
-// Aneu afegint les functions a exportar aquí
-
-const swapi = {
-  getMovieCount,
-  listMovies,
-  listMoviesSorted,
-};
 
 export default swapi;
 
@@ -346,3 +339,15 @@ createMovie(4).then((movie) => {
   movie.getHomeworlds().then((data) => console.log(data));
   movie.getHomeworldsReverse().then((data) => console.log(data));
 });
+
+// Aneu afegint les functions a exportar aquí
+
+const swapi = {
+  getMovieCount,
+  listMovies,
+  listMoviesSorted,
+  getMovieCharacters,
+  getMovieCharactersAndHomeworlds,
+  createMovie,
+};
+

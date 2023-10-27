@@ -1,17 +1,10 @@
-import { getMovieCount } from './swapi.js';
+import pec3 from './pec3/pec3';
 
-// Aquest index només serveix per provar algunes funcions si vols fer ús de la consola
-// per provar les funcions que has creat.
+console.log('Benvingut a MP6 de DAW!');
 
-async function main() {
-  try {
-    const numberOfMovies = await getMovieCount();
-    console.log(numberOfMovies);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-main();
-
-export default main;
+// Init basic functions
+pec3.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
+pec3.initMovieSelect('#select-movie');
+pec3.setMovieSelectCallbacks();
+pec3.deleteAllCharacterTokens();
+pec3.addChangeEventToSelectHomeworld();
