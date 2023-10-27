@@ -327,7 +327,7 @@ export class Movie {
     // Ara amb un nou map, podem retornar únicament la part que ens interessa,
     // els noms!
     //console.log(namesAndHomeworlds);
-    const homeworlds = namesAndHomeworlds.map((data) => data.homeworld);
+    const homeworlds = namesAndHomeworlds.map((data) => data.homeworld || null);
     // TIP! El "Set" és un tipus d'array que ens assegura que no tindrà elements
     // duplicats en el seu array. Cada cop que afegim elements, automàticament
     // ell verifica que no hi hagi repeticions.

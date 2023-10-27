@@ -20,9 +20,16 @@ export async function _getSwapiData(path) {
   return data;
 }
 
+async function _getSwapiData2(path) {
+  const res = await fetch(path);
+  const data = await res.json();
+  console.log(path);
+  return data;
+}
+
 export async function getMovieCount() {
   const data = await _getSwapiData('films/');
-  console.log(data);
+  //console.log(data);
   return data.count;
 }
 
@@ -121,16 +128,78 @@ async function getCharacterName(url) {
   return character.name;
 }
 
-getCharacterName('/people/3').then((data) => console.log(data));
+// getCharacterName('/people/3').then((data) => console.log(data));
 
 // 5.3 getMovieCharacters(id: string)
 
+// Fem la petició a l'API
+async function getMovieCharacters(id) {
+  const movie = await getMovieInfo(id);
+  //Substituim les URL dels personatges pel seu nom:
+  movie.characters = await _getCharacterNames(movie);
+  //Retornem la peli amb els noms dels personatges.
+  return movie;
+}
+
+//getMovieCharacters('1').then((data) => console.log(data));
+
 async function _getCharacterNames(movie) {
   return Promise.all(
-    movie.characters.map(async (url) => {
-      const path = url.split('api')[1];
-      const data = await _getSwapiData(path);
-      return data.name;
+    movie.characters.map(async (urlPersonatge) => {
+      const character = await _getSwapiData2(urlPersonatge);
+      if (!character) {
+        return null;
+      }
+      console.log(character.name);
+      return character.name;
     })
   );
+}
+
+// Exercici 6 -  getMovieCharactersAndHomeworlds(id:string)
+
+// Hauríem de fer que la propietat "characters" de la meva peli sigui així:
+// Ex: [{ "name": "Luke Skywalker", "homeworld": "Tatooine" },...]
+
+// Recupero la informació de la película i crido a la funció que em permetrà
+// que "characters" es pobli amb amb l'array {name, homeworld}
+async function getMovieCharactersAndHomeworlds(id) {
+  // Recupero la informació filtrada de la película
+  const movie = await getMovieInfo(id);
+  //getMovieInfo(id) --> characters, episodeID, name
+  movie.characters = await _getCharacterNamesAndHomeworlds(movie);
+  return movie;
+}
+
+getMovieCharactersAndHomeworlds('1').then((data) => console.log(data));
+
+// Aplico la lògica de PromiseAll per gestionar la petició a personatges.
+async function _getCharacterNamesAndHomeworlds(movie) {
+  const charactersWithHomeworld = await Promise.all(
+    movie.characters.map((peopleURL) =>
+      _getCharacterNameAndHomeworld(peopleURL)
+    )
+  );
+  return charactersWithHomeworld;
+}
+
+// Gestiono els retorns de les promeses dels personatges (name)
+// Aprofito per construir el format que hauré de retornar al final.
+async function _getCharacterNameAndHomeworld(peopleURL) {
+  const dataPersonatge = await _getSwapiData2(peopleURL);
+  if (!dataPersonatge) {
+    return null;
+  }
+  const character = {
+    name: dataPersonatge.name,
+    homeworld: dataPersonatge.homeworld,
+  };
+  character.homeworld = await _getHomeWorldName(character.homeworld);
+  return character;
+}
+
+// Gestiono els retorns de les promeses dels planetes
+async function _getHomeWorldName(planetURL) {
+  const planet = await _getSwapiData2(planetURL);
+  return planet.name;
 }
