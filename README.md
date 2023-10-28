@@ -1,376 +1,166 @@
-# StarWars API - Part 1
+# StarWars API - Part 2 - Interacció amb el DOM
 
-Aquest projecte te la finalitat de començar a treballar amb APIs i fer peticions a un servidor extern. Haurem de fer servir la lògica asincrònica per tal de fer les peticions i mostrar la informació a l'usuari. D'altra banda necessitarem tècniques de treball amb objectes, arrays i en general els seus mètodes per tal de poder filtrar la informació que ens retorna el servidor.
+![alt text](/public/assets/battle-bg.jpg)
 
-## :books: Objectius
+## Presentació
 
-En aquest projecte treballem amb un servidor extern, per tant no tenim un fitxer JSON amb la informació que necessitem. Necessitem fer peticions a un servidor extern. En aquest cas farem servir l'API de StarWars SWAPI. Aquesta API ens permet fer peticions a diferents **endpoints** per tal de rebre la informació que necessitem. Per exemple, si volem rebre la informació de tots els personatges de StarWars, farem una petició a l'endpoint `https://swapi.dev/api/people/`. Si volem rebre la informació d'un personatge en concret, farem una petició a l'endpoint `https://swapi.dev/api/people/1/`. Com podeu veure, a l'endpoint hi afegim un número que correspon a l'ID del personatge que volem rebre. Això ens permet fer peticions a un servidor extern i rebre la informació que necessitem.
+En aquesta pràctica es treballa la interacció amb el DOM mitjançant JavaScript. Utilitzarem el cas d'estudi presentat a l'Act 6 per realitzar interaccions amb el DOM a partir de les dades de l'API web per consultar informació sobre la saga de pel·lícules de Star Wars (personatges, llocs, vehicles, etc.). Us oferim un web ja maquetat perquè us pugueu centrar en la implementació del codi JavaScript demanat als exercicis.
 
-Teniu la documentació de l'API a [https://swapi.dev/documentation](https://swapi.dev/documentation).
+## Cas d'estudi
 
-## Project Structure
+Aquesta pràctica reutilitza el cas d'estudi presentat a l'activitat anterior. Com ja hem comentat, en la nostra aplicació web volem oferir una sèrie de funcionalitats per explorar l'univers de Star Wars. Així, alguns exemples de consultes poden ser: **mostrar els personatges de les pel·lícules, filtrar per planetes i/o races o buscar un personatge en concret.**
 
-El boilerplate facilitat conté els següents fitxers i carpetes:
+L'origen de les dades de la nostra aplicació és l'API oberta i gratuïta, anomenada SWAPI (Star Wars API), que ja coneixeu de la pràctica 6.
 
-```
-starwars-api-workspace
-├── src
-│   ├── index.html
-│   ├── index.js
-│   ├── swapi.js
-│   └── styles.css
-├── .eslintrc.json
-├── package.json
-├── package-lock.json
-├── README.md
-└── tests
-    └── swapi.test.js
-```
+## L'aplicació web
 
-Treballem amb Eslint, Jest i Parcel. Eslint i Jest ja els hem vist en projectes anteriors. Parcel és un _bundler_ que ens permetrà treballar amb mòduls. A més a més, Parcelo substitueix algunes de les característiques de Webpack i Babel que requeríem per transpilar el nostre codi i fer-lo compatible amb els navegadors desitjats. Ara això ho podem fer a través de la configuració de Parcel.
+En aquesta pràctica us facilitem una estructura de l'aplicació web que volem desenvolupar. La web contindrà:
 
-### `src` Folder
+- Una capçalera amb el logotip.
+- Una barra lateral amb selectors per filtrar per pel·lícula i planeta.
+- Un panell central amb informació sobre els personatges, les pel·lícules i informació de les pel·lícules, si n'hi ha alguna seleccionada.
+- Un cercador per filtrar entre els personatges que es mostren en el llistat.
 
-Farem servir la carpeta `src` per desar tot el codi del nostre projecte. Aquesta carpeta conté els següents fitxers:
+## Com iniciar el desenvolupament
 
-- `index.html`: L'arxiu HTML que es carrega al navegador.
-- `index.js`: L'arxiu JavaScript que s'executa al carregar la pàgina.
-- `swapi.js`: L'arxiu JavaScript que conté la lògica per fer les peticions a l'API.
-- `styles.css`: L'arxiu CSS que conté l'estil de la pàgina.
-- `swapi.test.js`: Els testos son orientatius i poden requerir de canvis (s'han generat automàticament) però us recomanem que els feu servir per comprovar que el vostre codi funciona correctament.
+Per realitzar aquesta pràctica teniu dues opcions:
 
-### Configuration Files
+- Us animo a utilitzar utilitzar la vostra solució de la pràctica 6. Aquesta opció requerirà fer algunes petites modificacions per adaptar-la a les necessitats de la pràctica 7. Aquestes modificacions es detallen en cada exercici.
+- Pots també utilitzar la solució oficial de la pràctica 6 que ja tens en aquest repositori (tot i que t'hauràs de fer amb els "namings" que jo he fet servir).
 
-- `.babelrc`: The configuration file for Babel.
-- `.eslintrc.json`: The configuration file for ESLint.
-- `package.json`: The configuration file for npm.
+Teniu llibertat per triar la opció que us convingui més. En qualsevol cas, per facilitar i normalitzar l'avaluació de la pràctica 7, heu de seguir aquestes indicacions:
 
-## :pencil: Previ!
+- Amb aquesta pràctica es proporcionarà tant un **fitxer HTML** com un **CSS** amb els estils necessaris. A més, es proporcionarà el fitxer de la pràctica 6 amb les modificacions necessàries per obtenir tota la informació necessària.
 
-Abans de res verifica que pots instalar totes les dependències:
+## Tasques a realitzar
 
-```sh
-1. Clona el repositori
-2. Instal·la les dependència amb `npm install`.
-```
+En aquesta pràctica , heu de implementar les funcionalitats necessàries perquè el model desenvolupat a la pràctica anterior pugui interactuar amb el codi HTML proporcionat.
 
-En aquesta pràctica treballarem amb la notació ES Modules. Això vol dir que en comptes de fer servir `require` i `module.exports` farem servir `import` i `export`.
+És convenient separar sempre la lògica del controlador de les crides a la vista. Per això, es demana que implementeu totes les funcionalitats demanades als següents exercicis en un únic fitxer `./src/act7.js` i que feu les crides a aquestes funcions en el fitxer `./src/index.js`, que ha d'importar `act7.js`.
 
-### Fetch
+No heu de modificar ni afegir cap altre fitxer, tret del fitxer de proves, si decidiu fer-ne.
 
-D'altra banda comencem a fer ús del Fetch. Hem après el concepte de les promeses i la manera moderna de gestionar-la a través **d'async/await**.
+### Consideracions globals:
 
-El Fetch és en definitiva una petició (normalment un HTTP GET) que ens permet fer peticions a un servidor extern i esperar la resposta de manera similar a com ho farien les _Promise_. De fet ens retorna una promesa que es resol amb la resposta del servidor. Per exemple, si volem fer una petició a l'endpoint `https://swapi.dev/api/people/` farem:
+- L'identificador de l'episodi es pot considerar equivalent a l'identificador de la pel·lícula.
 
-```js
-fetch('https://swapi.dev/api/people/')
-  .then((response) => response.json())
-  .then((data) => console.log(data));
-```
+## Exercici 1
 
-També podem gestionar gestionar el fetch a través d'**async/await**, per exemple:
+Implementeu una funció `setMovieHeading()` que, donats els paràmetres definits a continuació, substitueixi el contingut de l'encapçalament de la pel·lícula modificant el DOM.
 
-```js
-const getPeople = async () => {
-  const response = await fetch('https://swapi.dev/api/people/');
-  const data = await response.json();
-  console.log(data);
-};
-```
+Paràmetres d'entrada:
 
-### JSON
+- `movieId`: Identificador de la pel·lícula
+- `titleSelector`: selector HTML de la ubicació del títol
+- `infoSelector`: selector HTML de la ubicació de la informació addicional de la pel·lícula
+- `directorSelector`: selector HTML de la ubicació de la informació del director.
 
-A l'exemple anterior podem veure que la resposta del servidor és un objecte JavaScript. Això és perquè el servidor ens retorna un JSON que ja sabem que és un format de dades que ens permet intercanviar informació entre diferents plataformes.
+Consideracions:
 
-Quin tipus tipus de dades retorna la funció **.json()**? Ho hauràs de tenir en compte a l'hora de gestionar la informació que ens retorna el servidor.
+- Heu de fer servir la funció `getMovieInfo()` implementada a la pràctica 6.
+- Si feu servir la vostra pròpia solució de la pràctica 6, necessitareu que l'objecte retornat per la funció `getMovieInfo()` inclogui els altres camps necessaris:
+  - director
+  - release
+  - episodeId
 
-El mètode .json() retorna una promesa que en cas d'èxit acabarà sent un parsing de la resposta a format text-JSON (https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
-
-### Ús de l'API
-
-Per utilitzar l'API us recomanem fer ús de la consola que es troba a la pàgina d'inici de l'API:
-
-- https://swapi.dev/
-
-S'hi poden realitzar consultes per verificar les dades obtingudes en el desenvolupament. Alhora, hi ha eines més completes, com ara Postman, que permeten emmagatzemar consultes, exportar dades i treballar amb les API de forma més completa, però el seu coneixement no és objecte d'aquesta PAC.
-
-# :rocket: Comencem!
-
-## Peticions a l'API
-
-En aquesta part haureu de crear una sèrie les funcions asíncrones que es detallen a continuació.
-
-**Notes:**
-
-1. S'entén que totes les funcions han de retornar promeses.
-2. Aquests valors s'han d'obtenir des de l'API de Star Wars anteriorment presentada (SWAPI).
-3. Els exercicis estan concebuts de manera que sigui un desenvolupament progressiu. HEU D'INTENTAR REUTILITZAR EL CODI!!!
-4. Podeu fer funcions auxiliars privades, és a dir, funcions que no siguin exportades i que només serveixin per a la implementació de les funcions públiques. Aquestes funcions acostumen a tenir un nom que comença per `_` (underscore). Per ex:
-
-```js
-const _compareByEpisodeID = (a, b) => {
-  if (a.episode_id < b.episode_id) {
-    return -1;
-  }
-  if (a.episode_id > b.episode_id) {
-    return 1;
-  }
-  return 0;
-};
-```
-
-### Exercici 1 (Exemple)
-
-Implementar una funció anomenada `getMovieCount()` que retorna la promesa de retornar el número corresponent a la quantitat de pel·lícules hi ha al servidor. Aquesta funció està implementada com exemple.
-
-**Exemple de retorn esperat un cop resolta la promesa:**
-
-```
-6
-```
-
-### Exercici 2
-
-Implementar una funció anomenada `listMovies()` que retorni una promesa que es resol amb un array d'objectes Film. Aquests objectes han de tenir només 4 atributs públics:
-
-- `name: string`
-- `director: string`
-- `release: string`
-- `episodeID: number`
-
-**Exemple de retorn esperat un cop resolta la promesa:**
+Codi resultant:
+Només en aquest exercici i a manera de guia, us proporcionem comentaris dins de la funció a implementar que detallen les accions que heu de realitzar:
 
 ```javascript
-[
- {
- "name": "A New Hope",
- "director": "George Lucas",
- "release": "1977-05-25",
- "episodeID": 4
- },
- ...
-]
-```
-
-### Exercici 3
-
-Implementar una funció anomenada `listMoviesSorted()` que retorna una promesa que es resol amb un array que conté els títols de les pel·lícules ordenats alfabèticament (per títol) juntament amb la informació del director, data de llançament i Id d'episodi.
-
-**Exemple de retorn esperat un cop resolta la promesa:**
-
-```javascript
-[
-  {
-    name: 'A New Hope',
-    director: 'George Lucas',
-    release: '1977-05-25',
-    episodeID: 4,
-  },
-  {
-    name: 'Return of the Jedi',
-    director: 'Richard Marquand',
-    release: '1983-05-25',
-    episodeID: 6,
-  },
-  {
-    name: 'The Phantom Menace',
-    director: 'George Lucas',
-    release: '1999-05-19',
-    episodeID: 1,
-  },
-];
-```
-
-### Exercici 4
-
-Implementar una funció anomenada `listEvenMoviesSorted()` que retorna una promesa que es resol amb un array d'objectes Film ordenats per episodeID de forma ascendent. Només s'han de retornar els episodis parells.
-
-**Nota:** Poseu especial atenció als tipus de dades i a la coerció de tipus a JavaScript (la coerció és la conversió automàtica que fa JavaScript d'un tipus de dada a un altre).
-
-**Exemple de retorn esperat un cop resolta la promesa:**
-
-```javascript
-[
-  {
-    name: 'Attack of the Clones',
-    director: 'George Lucas',
-    release: '2002-05-16',
-    episodeID: 2,
-  },
-  {
-    name: 'A New Hope',
-    director: 'George Lucas',
-    release: '1977-05-25',
-    episodeID: 4,
-  },
-];
-```
-
-### Exercici 5
-
-#### Exercici 5.1
-
-Implementar una funció `getMovieInfo(id: string)` que donat un id d'una pel·lícula, ens retorni una promesa que es resol amb un objecte que conté:
-
-- `name: string` → Conté el nom de la pel·lícula.
-- `episodeID: number` → Conté el camp episode_id.
-- `characters: Array<string>` → Conté un array amb les URL de les que es pot obtenir la informació d'un personatge.
-
-**Exemple de retorn esperat un cop resolta la promesa:**
-
-```javascript
-{
- characters: [
- "http://swapi.dev/api/people/1/",
- "http://swapi.dev/api/people/2/",
- "http://swapi.dev/api/people/3/",
- "http://swapi.dev/api/people/4/",
- "http://swapi.dev/api/people/5/",
- ...
- ],
- episodeID: 4,
- name: "A New Hope",
+src / index.js;
+export async function setMovieHeading(
+  movieId,
+  titleSelector,
+  infoSelector,
+  directorSelector
+) {
+  // TODO: Obtenim els elements del DOM amb `querySelector` i els emmagatzemem en una variable
+  // TODO: Obtenim la informació de la pel·lícula cridant al mètode de `swapi.js`
+  // TODO: Substituïm les dades fent servir un mètode de reemplaçament com `innerHTML`
 }
 ```
 
-#### Exercici 5.2
-
-Reescriure la funció `getCharacterName(URL: string)` que donada una url d'un personatge d'una pel·lícula, retorna una promesa que es resol amb el nom del personatge, utilitzant `async` i `await`.
-
-**Exemple de retorn esperat un cop resolta la promesa:**
+Per provar el funcionament es necessari cridar a la funció passant com paràmetres els selectors de classe existents a HTML. Fieux-vos que com que exportem diverses funcions com a default, cal importar-les totes i cridar-les una a una:
 
 ```javascript
-'Luke Skywalker';
+import act7.js from './act7.js';
+console.log('Benvingut a JS per programadors');
+// Inicialitza les funcions bàsiques
+pec3.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
 ```
 
-#### Exercici 5.3
+Exemple del codi generat:
 
-Implementar una funció `getMovieCharacters(id: string)` que donat un id d'una pel·lícula, retorna una promesa que es resol amb un array que conté els noms dels personatges que apareixen a la mateixa pel·lícula.
-
-- Utilitzant `async` i `await` és més intuïtiva.
-- La complexitat d'aquest exercici rau en transformar les adreces que ens arriben a l'atribut characters de la pel·lícula en noms.
-- Heu d’utilitzar la funció `getCharacterName`.
-- Aquí incorporem un nou concepte, el de `Promise.All`. Aquest ens permet executar un array de promeses i esperar a que totes es resolguin. Per exemple: tenim un array amb diferents API que ens retornen un valor. Volem executar totes les API i esperar a que totes es resolguin per poder retornar el resultat. En aquest cas farem servir `Promise.all`:
-
-```javascript
-const getValues = async () => {
-  const values = await Promise.all([
-    fetch('https://swapi.dev/api/people/1/'),
-    fetch('https://swapi.dev/api/people/2/'),
-    fetch('https://swapi.dev/api/people/3/'),
-  ]);
-  console.log(values);
-};
+```html
+<div class="movie">
+  <h2 class="movie__title">A New Hope</h2>
+  <h4 class="movie__info">Episodi 4 - 1977-05-25</h4>
+  <p class="movie__director">Director: George Lucas</p>
+</div>
 ```
 
-**Exemple de retorn esperat un cop resolta la promesa:**
+## Exercici 2
 
-```javascript
-{
-  "name": "A New Hope",
-  "episodeID": 4,
-  "characters": [
-    "Luke Skywalker",
-    "C-3PO",
-    "R2-D2",
-    "Darth Vader",
-    "Leia Organa",
-    "Owen Lars",
-    "Beru Whitesun lars",
-    "R5-D4",
-    "Biggs Darklighter",
-    "Obi-Wan Kenobi",
-    "Wilhuff Tarkin",
-    "Chewbacca",
-    "Han Solo",
-    "Greedo",
-    "Jabba Desilijic Tiure",
-    "Wedge Antilles",
-    "Jek Tono Porkins",
-    "Raymus Antilles"
-  ]
-}
+Implementeu una funció `initMovieSelect()` que reemplaci els valors del selector de pel·lícules amb les dades obtingudes de l'API. Als valors retornats per l'API cal afegir-hi una opció més per al cas inicial "Selecciona una pel·lícula". Aquesta opció ha de ser la primera que apareixi al selector de pel·lícules.
+
+Paràmetres d'entrada:
+
+- `selector`: Selector HTML del selector de pel·lícules.
+
+Consideracions:
+
+- Heu de fer servir la funció `listMoviesSorted()` implementada a la pràctica 6.
+- La funció s'ha de cridar des del fitxer `./index.js`. Podeu col·locar la crida just després de la crida a la funció `setMovieHeading()` implementada a l'exercici anterior.
+
+Exemple del codi generat:
+
+```html
+<select id="select-movie" name="movie">
+  <option value="">Selecciona una pel·lícula</option>
+  <option value="4">A New Hope</option>
+  <option value="2">Atac dels clons</option>
+  <option value="6">El retorn del Jedi</option>
+  <option value="3">La venjança dels Sith</option>
+  <option value="5">L'Imperi contraataca</option>
+  <option value="1">La menaceja fantasma</option>
+</select>
 ```
 
-### Exercici 6
+## Exercici 3
 
-Implementa la funció `getMovieCharactersAndHomeworlds(id: string)`
+Implementeu una funció `setMovieSelectCallbacks()` que creï un event listener per a l'esdeveniment `change` del selector de pel·lícules. D'aquesta manera, cada cop que el selector de pel·lícules canviï de valor, s'actualitzarà la informació de la pel·lícula a la capçalera de l'aplicació. Recordeu que si s'escull l'opció "Selecciona una pel·lícula", la capçalera s'ha de buidar.
 
-Una funció que retorna una Promesa que es resol amb un objecte que conté els següents atributs públics:
+Consideracions:
 
-- `episodeID: Number` - Representa el camp episode_id.
-- `name: String` - Indica el títol de la pel·lícula.
-- `characters: Array` - Conté informació sobre els personatges que apareixen a la pel·lícula.
-  - `name: String` - Nom del personatge.
-  - `homeworld: String` - Nom del planeta on va néixer el personatge.
+- Heu de fer servir la funció `getMovieInfo()` implementada a la pràctica 6.
+- La funció s'ha de cridar des del fitxer `./index.js`.
 
-**Exemple de l'objecte retornat una vegada s'ha resolt la Promesa:**
+## Exercici 4
 
-```javascript
-{
-  "episodeID": 4,
-  "name": "A New Hope",
-  "characters": [
-    { "name": "Luke Skywalker", "homeworld": "Tatooine" },
-    { "name": "C-3PO", "homeworld": "Tatooine" },
-    { "name": "R2-D2", "homeworld": "Naboo" },
-    { "name": "Darth Vader", "homeworld": "Tatooine" },
-    { "name": "Leia Organa", "homeworld": "Alderaan" },
-    { "name": "Owen Lars", "homeworld": "Tatooine" },
-    { "name": "Beru Whitesun Lars", "homeworld": "Tatooine" },
-    { "name": "R5-D4", "homeworld": "Tatooine" },
-    { "name": "Biggs Darklighter", "homeworld": "Tatooine" },
-    { "name": "Obi-Wan Kenobi", "homeworld": "Stewjon" },
-    { "name": "Wilhuff Tarkin", "homeworld": "Eriadu" },
-    { "name": "Chewbacca", "homeworld": "Kashyyyk" },
-    { "name": "Han Solo", "homeworld": "Corellia" },
-    { "name": "Greedo", "homeworld": "Rodia" },
-    { "name": "Jabba Desilijic Tiure", "homeworld": "Nal Hutta" },
-    { "name": "Wedge Antilles", "homeworld": "Corellia" },
-    { "name": "Jek Tono Porkins", "homeworld": "Bestine IV" },
-    { "name": "Raymus Antilles", "homeworld": "Alderaan" }
-  ]
-}
-```
+Afegiu el codi necessari a l'event listener de l'esdeveniment `change` del selector de pel·lícules (implementat a l'exercici anterior) perquè també realitzi les següents accions (en l'ordre especificat):
 
-### Exercici 7
+- Buidar el selector de "món natal".
+- Carregar tots els planetes dels personatges de la pel·lícula seleccionada en el selector de "món natal". Als valors retornats per l'API cal afegir-hi una opció més per al cas inicial "Selecciona un món natal". Aquesta opció ha de ser la primera que apareixi al selector de planetes.
+- Eliminar totes les fitxes de personatges que hi hagi a la pantalla.
 
-Donada la funció **createMovie(id: string)** que es defineix a continuació:
+Consideracions:
 
-```javascript
-async function createMovie(id) {
-  const movie = await getMovieInfo(id);
-  return new Movie(movie.name, movie.characters);
-}
-```
+- Heu de fer servir la funció `getMovieCharactersAndHomeworlds()` implementada a la pràctica 6.
+- Si no ho heu fet a l'activitat 6, haurieu d'eliminar els 'homeworlds' repetits, així com ordenar-los alfabèticament.
+- La funció s'ha de cridar des del fitxer `./index.js`.
 
-Implementar la classe Movie amb els els següents mètodes i atributs:
+## Exercici 5
 
-- name: String indicant el títol de la pel·lícula.
-- getCharacters(): Funció asíncrona que es resol amb una matriu de noms dels
-  personatges que surten a la pel·lícula.
-- getHomeworlds(): Funció asíncrona que es resol amb un array que conté tan sols els noms
-  dels planetes on van néixer els personatges que apareixen a la pel·lícula.
-- getHomeworldsReverse(): Funció asíncrona que es resol amb un array que conté els noms
-  dels planetes on van néixer els personatges, ordenats en ordre alfabètic invers
+Implementeu una funció `addChangeEventToSelectHomeworld()` que creï un event listener per a l'esdeveniment `change` del selector de planetes perquè, quan es seleccioni un planeta, es realitzin les següents accions (en l'ordre especificat):
 
-### Exercici 8
+- Eliminar totes les fitxes de personatges que hi hagi a la pantalla.
+- Crear les fitxes de tots els personatges que apareguin a la pel·lícula seleccionada i que, a més, pertanyin al planeta seleccionat (les dues condicions). Òbviament, només es poden carregar les fitxes dels personatges si els dos selectors (pel·lícules i planetes) tenen un valor vàlid seleccionat.
 
-En els anteriors exercicis no s'ha considerat el control d'errors o una fallada a la crida a l'API de StarWars. Atès que l'API és un servei extern, hi ha la possibilitat que al trucar a un endpoint aquest no
-retorni informació, no respongui o llanci un error. Donada la següent funció:
+Consideracions:
 
-```javascript
-async function createMovie(id) {
-  const movie = await getMovieInfo(id);
-  return movie;
-}
-```
-
-Implementar la comprovació o comprovacions necessàries per tal de gestionar possibles errors i
-explicar el perquè d’aquestes comprovacions.
-
-# Enhorabona!
-
-En la propera pràctica practicarem amb el DOM per mostrar totes aquestes dades a l'usuari amb una interfície gràfica com aquesta:
-
-![StarWars API](https://imgur.com/yRyyayi.png)
+- Heu de fer servir la funció `getMovieCharactersAndHomeworlds()` implementada a la pràctica 6.
+- Si feu servir la vostra pròpia solució de la pràctica 6, necessitareu que l'objecte retornat per la funció `getMovieCharactersAndHomeworlds()` inclogui els altres camps necessaris per formar la fitxa del personatge:
+  - any de naixement
+  - color dels ulls
+  - gènere
+- La funció s'ha de cridar des del fitxer `./index.js`.
