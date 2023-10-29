@@ -170,3 +170,5 @@ Consideracions:
 A l'arxiu `/public/assets/people` trobaràs un conjunt d'imatges amb els personatges de Star Wars. El número que du com a títol cada imatge és l'identificador del personatge. Fes les modificacions pertinents al codi de manera que puguis mostrar també la imatge del personatge a la fitxa.
 
 Pots mirar també d'implementar que mostri algun missatge per pantalla si sembla que no troba cap personatge per al planeta seleccionat.
+
+Fes un cop d'ull a la informació de la API a veure si podries fer alguna millor en la cerca de personatges de cada planeta i incopora-ho al codi (swapi.js).
