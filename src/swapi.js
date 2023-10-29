@@ -1,4 +1,4 @@
-//import fetch from 'node-fetch';
+//const fetch = require ('node-fetch');
 
 function getMovieCount() {
   return fetch('https://swapi.dev/api/films/')
@@ -41,6 +41,9 @@ function getMovieInfo(id) {
       characters: movie.characters,
       director: movie.director,
       release: movie.release_date,
+      birth_year: movie.birth_year,
+      gender: movie.gender,
+      eye_color: movie.eye_color,
     }));
 }
 
@@ -109,6 +112,15 @@ function _compareByEpisodeId(a, b) {
   return parseFloat(a.episodeID) - parseFloat(b.episodeID);
 }
 
+async function _getCharacterPhoto(characterName) {
+  const response = await fetch(
+    `https://starwars-visualguide.com/assets/img/characters/?search=${characterName}`
+  );
+  const data = await response.json();
+  console.log(data);
+  return (imageUrl = data[0].image);
+}
+
 async function createMovie(id) {
   const movie = await getMovieInfo(id);
   return new Movie(movie.name, movie.characters);
@@ -153,4 +165,5 @@ export default {
   getMovieCharactersAndHomeworlds,
   createMovie,
   _compareByName,
+  _getCharacterPhoto,
 };

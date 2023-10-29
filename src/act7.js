@@ -27,7 +27,6 @@ async function initMovieSelect(selector) {
   select.appendChild(option);
   movies.map((movie) => {
     option = document.createElement('option');
-    console.log(movie);
     option.value = movie.episodeID;
     option.innerHTML = movie.name;
     select.appendChild(option);
@@ -47,6 +46,7 @@ function addChangeEventToSelectHomeworld() {
 }
 
 async function _createCharacterTokens() {
+  console.log('hola!');
   let selectMovie = document.querySelector('#select-movie');
   let selectHomeworld = document.querySelector('#select-homeworld');
 
@@ -68,13 +68,18 @@ async function _createCharacterTokens() {
     (character) => character.homeworld === selectHomeworld.value
   );
 
-  filteredCharacters.map((d) => {
+  filteredCharacters.map(async (d) => {
     let li = document.createElement('li');
     li.className = 'list__item item character';
     ul.appendChild(li);
-
     let img = document.createElement('img');
-    img.src = 'assets/user.svg';
+    //Anem a introduir la imatge del personatge
+    // Amb split separem la url per /
+    const urlParts = d.url.split('/');
+    console.log(urlParts);
+    const characterNumber = urlParts[urlParts.length - 2];
+    img.src = `/public/assets/people/${characterNumber}.jpg`;
+    console.log(img.src);
     img.className = 'character__image';
     li.appendChild(img);
 
