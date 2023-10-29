@@ -46,7 +46,6 @@ function addChangeEventToSelectHomeworld() {
 }
 
 async function _createCharacterTokens() {
-  console.log('hola!');
   let selectMovie = document.querySelector('#select-movie');
   let selectHomeworld = document.querySelector('#select-homeworld');
 
@@ -76,11 +75,10 @@ async function _createCharacterTokens() {
     //Anem a introduir la imatge del personatge
     // Amb split separem la url per /
     const urlParts = d.url.split('/');
-    console.log(urlParts);
     const characterNumber = urlParts[urlParts.length - 2];
     img.src = `/public/assets/people/${characterNumber}.jpg`;
-    console.log(img.src);
     img.className = 'character__image';
+    img.style.maxWidth = '100%'; // Add this line to set the maximum width to 100%
     li.appendChild(img);
 
     let h2 = document.createElement('h2');
@@ -127,6 +125,12 @@ function setMovieSelectCallbacks() {
 }
 
 async function _handleOnSelectMovieChanged(event) {
+  // Esborrem l'anterior llistat de planetes i personatges, altrament afegirà a la llista dels ja presents
+  const selectHomeworld = document.querySelector('#select-homeworld');
+  selectHomeworld.innerHTML = '';
+
+  deleteAllCharacterTokens();
+
   // Obtenim el valor del selector que en aquest cas contindrà el número d'episodi
   const episodeID = event.target.value;
   // Obtenim les dades de la pel·lícula, però compte episodiID != filmID! :(

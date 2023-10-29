@@ -41,9 +41,6 @@ function getMovieInfo(id) {
       characters: movie.characters,
       director: movie.director,
       release: movie.release_date,
-      birth_year: movie.birth_year,
-      gender: movie.gender,
-      eye_color: movie.eye_color,
     }));
 }
 
@@ -68,34 +65,67 @@ async function getMovieCharactersAndHomeworlds(id) {
 }
 
 async function _getCharacterNames(movie) {
-  const characters = await Promise.all(movie.characters.map(getCharacterName));
-  return characters;
+  const characters = await Promise.allSettled(
+    movie.characters.map(getCharacterName)
+  );
+  return characters.map((character) => {
+    if (character.status === 'fulfilled') {
+      return character.value;
+    } else {
+      console.error(character.reason);
+      return null;
+    }
+  });
 }
 
 async function _getCharacterNamesAndHomeWorlds(movie) {
-  const charactersWithHomeWorlds = await Promise.all(
-    movie.characters.map(_getCharacterNameAndHomeworld)
+  const charactersWithHomeWorlds = await Promise.allSettled(
+    movie.characters.map(_getCharacterInfoAndHomeworld)
   );
-  return charactersWithHomeWorlds;
+  return charactersWithHomeWorlds.map((character) => {
+    if (character.status === 'fulfilled') {
+      return character.value;
+    } else {
+      console.error(character.reason);
+      return null;
+    }
+  });
 }
 
-async function _getCharacterNameAndHomeworld(url) {
+async function _getCharacterInfoAndHomeworld(url) {
   url = url.replace('http://', 'https://');
-  const raw = await fetch(url);
-  const res = await raw.json();
-  const character = { name: res.name, homeworld: res.homeworld };
+  try {
+    const raw = await fetch(url);
+    const res = await raw.json();
+    const character = {
+      name: res.name,
+      homeworld: res.homeworld,
+      birth_year: res.birth_year,
+      gender: res.gender,
+      eye_color: res.eye_color,
+      url: res.url,
+    };
 
-  character.homeworld = await _getHomeWorldName(character.homeworld);
+    character.homeworld = await _getHomeWorldName(character.homeworld);
 
-  return character;
+    return character;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 async function _getHomeWorldName(url) {
   // Necesario para siguientes apartados.
   url = url.replace('http://', 'https://');
-  return fetch(url)
-    .then((res) => res.json())
-    .then((planet) => planet.name);
+  try {
+    const raw = await fetch(url);
+    const res = await raw.json();
+    return res.name;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 function _compareByName(a, b) {
@@ -110,15 +140,6 @@ function _compareByName(a, b) {
 
 function _compareByEpisodeId(a, b) {
   return parseFloat(a.episodeID) - parseFloat(b.episodeID);
-}
-
-async function _getCharacterPhoto(characterName) {
-  const response = await fetch(
-    `https://starwars-visualguide.com/assets/img/characters/?search=${characterName}`
-  );
-  const data = await response.json();
-  console.log(data);
-  return (imageUrl = data[0].image);
 }
 
 async function createMovie(id) {
@@ -165,5 +186,4 @@ export default {
   getMovieCharactersAndHomeworlds,
   createMovie,
   _compareByName,
-  _getCharacterPhoto,
 };
