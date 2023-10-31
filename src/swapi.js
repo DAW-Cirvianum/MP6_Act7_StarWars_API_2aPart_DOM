@@ -27,7 +27,6 @@ async function listMovies() {
       throw new Error('API request failed');
     }
     const data = await res.json();
-    console.log(data);
     if (!Array.isArray(data)) {
       throw new Error('API did not return an array');
     }
