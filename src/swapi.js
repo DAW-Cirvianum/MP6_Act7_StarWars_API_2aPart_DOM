@@ -6,7 +6,7 @@ function getMovieCount() {
     .then((res) => res.count);
 }
 
-function listMovies() {
+/* function listMovies() {
   return fetch('https://swapi.info/api/films/')
     .then((res) => res.json())
     .then((res) => res.results)
@@ -18,6 +18,29 @@ function listMovies() {
         episodeID: movie.episode_id,
       }))
     );
+} */
+
+async function listMovies() {
+  try {
+    const res = await fetch('https://swapi.info/api/films/');
+    if (!res.ok) {
+      throw new Error('API request failed');
+    }
+    const data = await res.json();
+    if (!Array.isArray(data)) {
+      throw new Error('API did not return an array');
+    }
+    const movies = data.map((movie) => ({
+      name: movie.title,
+      director: movie.director,
+      release: movie.release_date,
+      episodeID: movie.episode_id,
+    }));
+    return movies;
+  } catch (error) {
+    console.error('Error:', error);
+    return [];
+  }
 }
 
 async function listMoviesSorted() {
