@@ -1,13 +1,13 @@
 //const fetch = require ('node-fetch');
 
 function getMovieCount() {
-  return fetch('https://swapi.dev/api/films/')
+  return fetch('https://swapi.info/api/films/')
     .then((res) => res.json())
     .then((res) => res.count);
 }
 
-function listMovies() {
-  return fetch('https://swapi.dev/api/films/')
+/* function listMovies() {
+  return fetch('https://swapi.info/api/films/')
     .then((res) => res.json())
     .then((res) => res.results)
     .then((movies) =>
@@ -18,6 +18,30 @@ function listMovies() {
         episodeID: movie.episode_id,
       }))
     );
+} */
+
+async function listMovies() {
+  try {
+    const res = await fetch('https://swapi.info/api/films/');
+    if (!res.ok) {
+      throw new Error('API request failed');
+    }
+    const data = await res.json();
+    console.log(data);
+    if (!Array.isArray(data)) {
+      throw new Error('API did not return an array');
+    }
+    const movies = data.map((movie) => ({
+      name: movie.title,
+      director: movie.director,
+      release: movie.release_date,
+      episodeID: movie.episode_id,
+    }));
+    return movies;
+  } catch (error) {
+    console.error('Error:', error);
+    return [];
+  }
 }
 
 async function listMoviesSorted() {
@@ -33,7 +57,7 @@ async function listEvenMoviesSorted() {
 }
 
 function getMovieInfo(id) {
-  return fetch(`https://swapi.dev/api/films/${id}/`)
+  return fetch(`https://swapi.info/api/films/${id}/`)
     .then((res) => res.json())
     .then((movie) => ({
       name: movie.title,

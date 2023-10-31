@@ -74,8 +74,10 @@ async function _createCharacterTokens() {
     let img = document.createElement('img');
     //Anem a introduir la imatge del personatge
     // Amb split separem la url per /
+    console.log(d);
     const urlParts = d.url.split('/');
-    const characterNumber = urlParts[urlParts.length - 2];
+    const characterNumber = urlParts[urlParts.length - 1];
+    console.log(characterNumber);
     img.src = `/public/assets/people/${characterNumber}.jpg`;
     img.className = 'character__image';
     img.style.maxWidth = '100%'; // Add this line to set the maximum width to 100%
