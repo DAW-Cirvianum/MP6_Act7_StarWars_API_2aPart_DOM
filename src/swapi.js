@@ -1,13 +1,13 @@
 //const fetch = require ('node-fetch');
 
 function getMovieCount() {
-  return fetch('https://swapi.dev/api/films/')
+  return fetch('https://swapi.info/api/films/')
     .then((res) => res.json())
     .then((res) => res.count);
 }
 
 function listMovies() {
-  return fetch('https://swapi.dev/api/films/')
+  return fetch('https://swapi.info/api/films/')
     .then((res) => res.json())
     .then((res) => res.results)
     .then((movies) =>
@@ -33,7 +33,7 @@ async function listEvenMoviesSorted() {
 }
 
 function getMovieInfo(id) {
-  return fetch(`https://swapi.dev/api/films/${id}/`)
+  return fetch(`https://swapi.info/api/films/${id}/`)
     .then((res) => res.json())
     .then((movie) => ({
       name: movie.title,
