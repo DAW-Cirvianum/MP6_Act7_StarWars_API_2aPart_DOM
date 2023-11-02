@@ -86,7 +86,7 @@ Per provar el funcionament es necessari cridar a la funció passant com paràmet
 import act7.js from './act7.js';
 console.log('Benvingut a JS per programadors');
 // Inicialitza les funcions bàsiques
-pec3.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
+act7.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
 ```
 
 Exemple del codi generat:
