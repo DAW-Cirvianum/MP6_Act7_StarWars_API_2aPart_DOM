@@ -19,18 +19,42 @@ async function setMovieHeading(
 }
 
 async function initMovieSelect(selector) {
+  // Recuperem les dades del servidor
   const movies = await swapi.listMoviesSorted();
+  //console.log(movies);
+  // Seleccionem el nostre element sobre el que haurem d'actuar (menú desplegable)
   const select = document.querySelector(selector);
-  let option = document.createElement('option');
+  // Com que es tracta d'un select, haurem d'injectar "options" --> https://developer.mozilla.org/es/docs/Web/HTML/Element/select
+  const option = document.createElement('option');
+  // Inicialitzem amb el valor per defecte que ens demanen i injectem
   option.value = '';
-  option.innerHTML = 'Select a movie';
-  select.appendChild(option);
-  movies.map((movie) => {
-    option = document.createElement('option');
+  option.innerHTML = "Selecciona una pel·lícula";
+  select.appendChild(option)
+  
+  // Ara com ho puc fer per anar posant la resta de pel·lícules... movies és un array amb la info no?
+  // Un for of... o un map? 
+  for (const movie of movies) {
+    // De fet puc reutilitzar el mateix option que he creat abans. 
+    // El const no me permet reassignar tot un objecte, però si que puc modificar les seves propietats!!! 
     option.value = movie.episodeID;
     option.innerHTML = movie.name;
-    select.appendChild(option);
-  });
+    select.appendChild(option.cloneNode(true));
+  }
+
+  // O amb un map
+  // movies.map(movie => {
+  //   option.value = movie.episodeID;
+  //   option.innerHTML = movie.name;
+  //   select.appendChild(option.cloneNode(true));
+  // })
+
+  // O amb un forEach
+  // movies.forEach(movie => {
+  //   option.value = movie.episodeID;
+  //   option.innerHTML = movie.name;
+  //   select.appendChild(option.cloneNode(true));
+  // })
+  
 }
 
 function deleteAllCharacterTokens() {
