@@ -14,7 +14,37 @@ async function setMovieHeading(movieId, titleSelector, infoSelector, directorSel
   director.innerHTML = `Director: ${movieInfo.director}`
 }
 
-async function initMovieSelect(selector) {}
+
+async function initMovieSelect(selector) {
+  // Recuperem les dades del servidor
+  const movies = await swapi.listMoviesSorted();
+  console.log(movies);
+  // Seleccionem el nostre element sobre el que haurem d'actuar (menú desplegable)
+  const select = document.querySelector(selector);
+  // Com que es tracta d'un select, haurem d'injectar "options" --> https://developer.mozilla.org/es/docs/Web/HTML/Element/select
+  const option = document.createElement('option');
+  // Inicialitzem amb el valor per defecte que ens demanen i injectem
+  option.value = '';
+  option.innerText = "Selecciona una pel·lícula";
+  select.appendChild(option)
+  
+  // Ara com ho puc fer per anar posant la resta de pel·lícules... movies és un array amb la info no?
+  // Un for of... o un map?
+  for (const movie of movies){
+    const option = document.createElement('option');
+    option.value = movie.episodeID;
+    option.innerText = movie.name;
+    select.appendChild(option)
+  }
+
+  // O amb un map
+  // movies.map(movie => {
+  //   option.value = movie.episodeID;
+  //   option.innerHTML = movie.name;
+  //   select.appendChild(option.cloneNode(true));
+  // })
+
+}
 
 function deleteAllCharacterTokens() {}
 
@@ -26,9 +56,19 @@ async function _createCharacterTokens() {}
 
 function _addDivChild(parent, className, html) {}
 
-function setMovieSelectCallbacks() {}
+function setMovieSelectCallbacks() {
+  // Aquesta funcio ha d'implementar un eventListener sobre el selector de películes
+  // 1. Obtenir l'element + 2. Afegir l'eventListener per quan canviï la opció. + 3. Callback a la funció qeu actualitza les dades amb la informació necessari
+  const selectMovie = document.querySelector('#select-movie');
+  // Podem gestionar la lògica en una funció auxiliar
+  selectMovie.addEventListener('change', _handleOnSelectMovieChanged)
+}
 
-async function _handleOnSelectMovieChanged(event) {}
+async function _handleOnSelectMovieChanged(event) {
+  // 1. Obtenir el nou valor del selector
+  // 2. Cridar a la funció que em permet actualitzar les dades de la pel·lícula
+
+}
 
 function _filmIdToEpisodeId(episodeID) {}
 
