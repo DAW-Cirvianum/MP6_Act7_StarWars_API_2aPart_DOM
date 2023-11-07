@@ -139,8 +139,8 @@ Consideracions:
 
 Afegiu el codi necessari a l'event listener de l'esdeveniment `change` del selector de pel·lícules (implementat a l'exercici anterior) perquè també realitzi les següents accions (en l'ordre especificat):
 
-- Buidar el selector de "món natal".
-- Carregar tots els planetes dels personatges de la pel·lícula seleccionada en el selector de "món natal". Als valors retornats per l'API cal afegir-hi una opció més per al cas inicial "Selecciona un món natal". Aquesta opció ha de ser la primera que apareixi al selector de planetes.
+- Buidar el selector de "homeworld".
+- Carregar tots els planetes dels personatges de la pel·lícula seleccionada en el selector de "homeworld". Als valors retornats per l'API cal afegir-hi una opció més per al cas inicial "Selecciona un homeworld". Aquesta opció ha de ser la primera que apareixi al selector de planetes.
 - Eliminar totes les fitxes de personatges que hi hagi a la pantalla.
 
 Consideracions:
