@@ -52,11 +52,98 @@ function deleteAllCharacterTokens() {
 
 // EVENT HANDLERS //
 
-function addChangeEventToSelectHomeworld() {}
+function addChangeEventToSelectHomeworld() {
+  const selectHomeWorld = document.querySelector('#select-homeworld');
+  selectHomeWorld.addEventListener('change', _createCharacterTokens);
+}
 
-async function _createCharacterTokens() {}
+async function _createCharacterTokens() {
+  // Necessitem saber quina pel·lícula i quin planeta s'han sel·leccionat. 
+  const selectMovie = document.querySelector('#select-movie');
 
-function _addDivChild(parent, className, html) {}
+  deleteAllCharacterTokens();
+
+  // Obtenim el nostre objecte per adaptar a l'endpoint correcte 
+  const movie = episodeToMovieIDs.find(({m, e}) => e == selectMovie.value);
+
+  // Obtenim les dades de la película 
+  const charactersAndHomeworlds = await swapi.getMovieCharactersAndHomeworlds(movie.m);
+
+  const selectHomeWorld = document.querySelector('#select-homeworld');
+
+  // Obtenim la llista de personatges que únicament son del planeta filtrat
+  const characters = charactersAndHomeworlds.characters.filter((character) => character.homeworld === selectHomeWorld.value);
+
+  console.log(characters);
+  
+  // Seleccionem l'ul on voldrem injectar la llista de personatges. 
+  const ul = document.querySelector('.list__characters');
+  
+  characters.forEach((personatge) => {
+    // Aquesta és l'estructura que hem d'aconseguir:
+    // <li class="list__item item character">
+    //           <img src="assets/user.svg" class="character__image" />
+    //           <h2 class="character__name">Leia Skywalker</h2>
+    //           <div class="character__birth">
+    //             <strong>Birth Year:</strong> 19 BBY
+    //           </div>
+    //           <div class="character__eye"><strong>Eye color:</strong> Blue</div>
+    //           <div class="character__gender"><strong>Gender:</strong> Male</div>
+    //           <div class="character__home">
+    //             <strong>Home World:</strong> Tatooine
+    //           </div>
+    // </li>
+    // Hem d'afegir el nom del personatge... 
+
+    let li = document.createElement('li');
+    li.className = 'list__item item character';
+    ul.appendChild(li);
+    // Les imatges les tenim en local. Creem un element "img" i li assignem la url de la imatge
+    let img = document.createElement('img');
+    const urlArr = personatge.url.split("/");
+    console.log(urlArr);
+    const id = urlArr[urlArr.length-1];
+    
+    img.src = '/public/assets/people/'+id+".jpg";
+    img.className = 'character__image';
+    img.style.maxWidth = '100%'; // Add this line to set the maximum width to 100%
+    li.appendChild(img);
+
+    let h2 = document.createElement('h2');
+    h2.className = 'character__name';
+    h2.innerHTML = personatge.name;
+    li.appendChild(h2);
+
+
+    _addDivChild(
+      li,
+      'character__birth',
+      '<strong>Birth Year:</strong> ' + personatge.birth_year
+    );
+    _addDivChild(
+      li,
+      'character__eye',
+      '<strong>Eye color:</strong> ' + personatge.eye_color
+    );
+    _addDivChild(
+      li,
+      'character__gender',
+      '<strong>Gender:</strong> ' + personatge.gender
+    );
+    _addDivChild(
+      li,
+      'character__home',
+      '<strong>Home World:</strong> ' + personatge.homeworld
+    );
+  });
+  }
+
+function _addDivChild(parent, className, html) {
+  let div = document.createElement('div');
+  div.className = className;
+  div.innerHTML = html;
+  parent.appendChild(div);
+}
 
 function setMovieSelectCallbacks() {
   // Aquesta funcio ha d'implementar un eventListener sobre el selector de películes
