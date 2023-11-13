@@ -28,17 +28,18 @@ async function initMovieSelect(selector) {
   const option = document.createElement('option');
   // Inicialitzem amb el valor per defecte que ens demanen i injectem
   option.value = '';
-  option.innerHTML = "Selecciona una pel·lícula";
+  option.textContent = "Selecciona una pel·lícula";
+  console.log(option)
   select.appendChild(option)
+
   
   // Ara com ho puc fer per anar posant la resta de pel·lícules... movies és un array amb la info no?
-  // Un for of... o un map? 
-  for (const movie of movies) {
-    // De fet puc reutilitzar el mateix option que he creat abans. 
-    // El const no me permet reassignar tot un objecte, però si que puc modificar les seves propietats!!! 
+  // Un for of... o un map?
+  for (const movie of movies){
+    const option = document.createElement('option');
     option.value = movie.episodeID;
-    option.innerHTML = movie.name;
-    select.appendChild(option.cloneNode(true));
+    option.innerText = movie.name;
+    select.appendChild(option)
   }
 
   // O amb un map
@@ -57,7 +58,7 @@ async function initMovieSelect(selector) {
   
 }
 
-function deleteAllCharacterTokens() {
+async function deleteAllCharacterTokens() {
   let listCharacters = document.querySelector('.list__characters');
   listCharacters.innerHTML = '';
 }
@@ -86,13 +87,16 @@ async function _createCharacterTokens() {
   // }
 
   // Ens assegurem que no hi ha cap token de personatge
-  deleteAllCharacterTokens();
+  await deleteAllCharacterTokens();
 
   // Creem el llistat de personatges que injectarem a la ul del DOM
   var ul = document.querySelector('.list__characters');
 
   // Obtenim les dades de la pel·lícula i els personatges
-  let data = await swapi.getMovieCharactersAndHomeworlds(selectMovie.value);
+  const value = _filmIdToEpisodeId(selectMovie.value);
+  // Obtenim el valor del selector que en aquest cas contindrà el número d'episodi
+
+  let data = await swapi.getMovieCharactersAndHomeworlds(value);
   // "data.characters" conté un array amb un objecte de tots els personatges de la pel·lícula
   // recordem que l'objecte personatges conté el planeta d'origen sota el nom: "homeworld". Filtrem doncs:
   let filteredCharacters = data.characters.filter(
@@ -127,10 +131,10 @@ async function _createCharacterTokens() {
     // Amb split separem la url per /
     const urlParts = personatge.url.split('/');
     const characterNumber = urlParts[urlParts.length - 1];
-    //img.src = `/public/assets/people/${characterNumber}.jpg`;
+    img.src = `/public/assets/people/${characterNumber}.jpg`;
 
     // Imatge per defecte:
-    img.src = '/public/assets/user.svg'
+    //img.src = '/public/assets/user.svg'
     img.className = 'character__image';
     img.style.maxWidth = '100%'; // Add this line to set the maximum width to 100%
     li.appendChild(img);
@@ -200,12 +204,13 @@ async function _handleOnSelectMovieChanged(event) {
     const selectHomeworld = document.querySelector('#select-homeworld');
   selectHomeworld.innerHTML = '';
   // Ex4--> I també esborrem els tokens de personatges
-  deleteAllCharacterTokens();
+  await deleteAllCharacterTokens();
 
   // Obtenim el valor del selector que en aquest cas contindrà el número d'episodi
   const episodeID = event.target.value;
   // Obtenim les dades de la pel·lícula, però compte episodiID != filmID! :(
   const movieID = _filmIdToEpisodeId(episodeID);
+  
   const data = await swapi.getMovieInfo(movieID);
   // Actualitzem el header amb les dades de la pel·lícula
   _setMovieHeading(data);
@@ -266,6 +271,10 @@ function _setMovieHeading({ name, episodeID, release, director }) {
 
 function _populateHomeWorldSelector(homeworlds) {
   const selectHomeworld = document.querySelector('#select-homeworld');
+  const option = document.createElement('option');
+  option.innerText="Selecciona un planeta"
+  selectHomeworld.appendChild(option)    
+
 
   homeworlds.forEach((homeworld) => {
     const option = document.createElement('option');
