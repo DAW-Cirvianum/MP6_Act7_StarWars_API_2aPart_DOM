@@ -8,9 +8,13 @@ En aquesta pràctica es treballa la interacció amb el DOM mitjançant JavaScrip
 
 ## Cas d'estudi
 
-Aquesta pràctica reutilitza el cas d'estudi presentat a l'activitat anterior. Com ja hem comentat, en la nostra aplicació web volem oferir una sèrie de funcionalitats per explorar l'univers de Star Wars. Així, alguns exemples de consultes poden ser: **mostrar els personatges de les pel·lícules, filtrar per planetes i/o races o buscar un personatge en concret.**
+Aquesta pràctica et convido a continuar fent ús del codi que tenies de la teva Activitat prèvia de SWaPI. Com ja hem comentat, en la nostra aplicació web volem oferir una sèrie de funcionalitats per explorar l'univers de Star Wars. Així, alguns exemples de consultes poden ser: 
 
-L'origen de les dades de la nostra aplicació és l'API oberta i gratuïta, anomenada SWAPI (Star Wars API), que ja coneixeu de la pràctica 6.
+- Mostrar els personatges de les pel·lícules
+- Filtrar per planetes i/o races
+- Buscar un personatge en concret
+
+L'origen de les dades de la nostra aplicació és l'API oberta i gratuïta, anomenada SWAPI (Star Wars API), que ja coneixeu de la pràctica anterior: https://swapi.info/
 
 ## L'aplicació web
 
@@ -25,12 +29,12 @@ En aquesta pràctica us facilitem una estructura de l'aplicació web que volem d
 
 Per realitzar aquesta pràctica teniu dues opcions:
 
-- Us animo a utilitzar utilitzar la vostra solució de la pràctica 6. Aquesta opció requerirà fer algunes petites modificacions per adaptar-la a les necessitats de la pràctica 7. Aquestes modificacions es detallen en cada exercici.
+- Us animo a utilitzar utilitzar la vostra solució de la pràctica 6. Aquesta opció requerirà fer algunes petites modificacions per adaptar-la a les necessitats d'aquesta pràctica. Aquestes modificacions es detallen en cada exercici.
 - Pots també utilitzar la solució oficial de la pràctica 6 que ja tens en aquest repositori (tot i que t'hauràs de fer amb els "namings" que jo he fet servir).
 
 Teniu llibertat per triar la opció que us convingui més. En qualsevol cas, per facilitar i normalitzar l'avaluació de la pràctica 7, heu de seguir aquestes indicacions:
 
-- Amb aquesta pràctica es proporcionarà tant un **fitxer HTML** com un **CSS** amb els estils necessaris. A més, es proporcionarà el fitxer de la pràctica 6 amb les modificacions necessàries per obtenir tota la informació necessària.
+- Amb aquesta pràctica es proporcionarà tant un **fitxer HTML** com un **CSS** amb els estils necessaris. 
 
 ## Tasques a realitzar
 
@@ -42,7 +46,7 @@ No heu de modificar ni afegir cap altre fitxer, tret del fitxer de proves, si de
 
 ### Consideracions globals:
 
-- L'identificador de l'episodi es pot considerar equivalent a l'identificador de la pel·lícula.
+- Compte! Recorda qeu l'identificador de l'episodi no es correspon amb l'identificador de la pel·lícula.
 
 ## Exercici 1
 
@@ -86,7 +90,7 @@ Per provar el funcionament es necessari cridar a la funció passant com paràmet
 import act7.js from './act7.js';
 console.log('Benvingut a JS per programadors');
 // Inicialitza les funcions bàsiques
-act7.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
+pec3.setMovieHeading(1, '.movie__title', '.movie__info', '.movie__director');
 ```
 
 Exemple del codi generat:
