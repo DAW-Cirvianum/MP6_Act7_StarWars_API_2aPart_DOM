@@ -47,7 +47,7 @@ async function listMoviesSorted() {
   return movies.sort(_compareByName);
 }
 
-listMoviesSorted().then((res)=>console.log(res))
+//listMoviesSorted().then((res)=>console.log(res))
 
 async function listEvenMoviesSorted() {
   const movies = await listMovies();
