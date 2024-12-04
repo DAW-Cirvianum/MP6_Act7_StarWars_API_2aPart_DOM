@@ -128,7 +128,7 @@ async function _createCharacterTokens() {
     // Amb split separem la url per /
     const urlParts = personatge.url.split("/");
     const characterNumber = urlParts[urlParts.length - 1];
-    img.src = `/public/assets/people/${characterNumber}.jpg`;
+    img.src = `/assets/people/${characterNumber}.jpg`;
 
     // Imatge per defecte:
     //img.src = '/public/assets/user.svg'
