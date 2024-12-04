@@ -169,9 +169,12 @@ Consideracions:
   - gènere
 - La funció s'ha de cridar des del fitxer `./index.js`.
 
+
 ## Exercici 6
 
-A l'arxiu `/public/assets/people` trobaràs un conjunt d'imatges amb els personatges de Star Wars. El número que du com a títol cada imatge és l'identificador del personatge. Fes les modificacions pertinents al codi de manera que puguis mostrar també la imatge del personatge a la fitxa.
+A l'arxiu `/public/assets/people` trobaràs un conjunt d'imatges amb els personatges de Star Wars. El número que du com a títol cada imatge és l'identificador del personatge. Fes les modificacions pertinents al codi de manera que puguis mostrar també la imatge del personatge a la fitxa. 
+
+Hem configurat Parcel de manera les imatges acabin servides sota la carpeta `/people`. Pots comprovar-ho com apareixen sota `/dist` que és el directori que fa servir parcel pel servidor de desenvolupament.
 
 Pots mirar també d'implementar que mostri algun missatge per pantalla si sembla que no troba cap personatge per al planeta seleccionat.
 
