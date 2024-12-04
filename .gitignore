@@ -1,1 +1,15 @@
+# Ignore node_modules directory
 node_modules
+
+# Ignore Parcel cache directory
+.cache
+.parcel-cache
+
+# Ignore dist directory (output directory)
+dist
+
+# Ignore log files
+*.log
+
+# Ignore environment variable files
+.env
