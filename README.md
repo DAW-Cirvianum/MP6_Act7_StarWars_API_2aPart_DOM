@@ -71,7 +71,7 @@ Codi resultant:
 Només en aquest exercici i a manera de guia, us proporcionem comentaris dins de la funció a implementar que detallen les accions que heu de realitzar:
 
 ```javascript
-src / index.js;
+// index.js;
 export async function setMovieHeading(
   movieId,
   titleSelector,
