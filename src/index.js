@@ -1,7 +1,4 @@
 import act7 from "./act7.js";
-// Importa totes les imatges
-const images = import.meta.glob("..public/assets/people/*.jpg");
-console.log(images);
 
 console.log("Benvingut a MP6 de DAW!");
 
