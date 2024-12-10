@@ -1,5 +1,7 @@
 import swapi from "./swapi.js";
 
+let currentInfoDisplay;
+
 //Exemple d'inicialització de la llista de pel·lícules. Falten dades!
 async function setMovieHeading(
   movieId,
@@ -52,15 +54,109 @@ function setMovieSelectCallbacks() {
   selectMovie.addEventListener("change", _handleOnSelectMovieChanged);
 }
 
-function addChangeEventToSelectHomeworld() {}
+function addChangeEventToSelectHomeworld(event) {
+  const homeworldSelector = document.querySelector("#select-homeworld");
 
-function deleteAllCharacterTokens() {}
+  homeworldSelector.addEventListener("change", _createCharacterTokens);
+}
+
+function deleteAllCharacterTokens() {
+  const charactersList = document.querySelector(".list");
+  charactersList.innerHTML = "";
+}
 
 // EVENT HANDLERS //
 
-async function _createCharacterTokens() {}
+async function _createCharacterTokens(event) {
+  deleteAllCharacterTokens();
+  const ul = document.querySelector(".list");
+  const homeworld = event.target.value;
+  const characters = currentInfoDisplay.characters.filter(
+    (character) => character.homeworld == homeworld
+  );
 
-function _addDivChild(parent, className, html) {}
+  // Aquesta és l'estructura que hem d'aconseguir:
+  // <li class="list__item item character">
+  //           <img src="assets/user.svg" class="character__image" />
+  //           <h2 class="character__name">Leia Skywalker</h2>
+  //           <div class="character__birth">
+  //             <strong>Birth Year:</strong> 19 BBY
+  //           </div>
+  //           <div class="character__eye"><strong>Eye color:</strong> Blue</div>
+  //           <div class="character__gender"><strong>Gender:</strong> Male</div>
+  //           <div class="character__home">
+  //             <strong>Home World:</strong> Tatooine
+  //           </div>
+  // </li>
+
+  for (const character of characters) {
+    const li = document.createElement("li");
+    const img = document.createElement("img");
+    const h2 = document.createElement("h2");
+
+    li.classList.add("list__item", "item", "character");
+    //Anem a introduir la imatge del personatge:
+    const urlParts = character.url.split("/");
+    console.log(urlParts);
+    const characterNumber = urlParts[urlParts.length - 1];
+    // o també:
+
+    const characterUrl = new URL(character.url);
+    const segments = characterUrl.pathname.match(/[^/]+/g); // Obté només els segments del camí
+    const characterNumber = segments ? segments.at(-1) : null;
+
+    img.src = `/people/${characterNumber}.jpg`;
+    img.className = "character__image";
+    img.style.maxWidth = "100%";
+    img.className = "character__image";
+    h2.className = "character__name";
+    h2.innerText = character.name;
+    li.append(img, h2);
+
+    _addDivChild(
+      li,
+      "character__birth",
+      "<strong>Birth Year: </strong>" + character.birth_year
+    );
+    _addDivChild(
+      li,
+      "character__eye",
+      "<strong>Eye color: </strong>" + character.eye_color
+    );
+    _addDivChild(
+      li,
+      "character__gender",
+      "<strong>Gender: </strong>" + character.gender
+    );
+    _addDivChild(
+      li,
+      "character__home",
+      "<strong>Homeworld: </strong>" + character.homeworld
+    );
+
+    // div1.className = "character__birth";
+    // div1.innerHTML = `<strong>Birth Year:</strong> ${character.birth_year}`;
+
+    // div2.className = "character__eye";
+    // div2.innerHTML = `<strong>Eye color:</strong> ${character.eye_color}`;
+
+    // div3.className = "character__gender";
+    // div3.innerHTML = `<strong>Gender:</strong> ${character.gender}`;
+
+    // div4.className = "character__home";
+    // div4.innerHTML = `<strong>Home World:</strong> ${character.homeworld}`;
+
+    // li.append(img, h2, div1, div2, div3, div4);
+    ul.appendChild(li);
+  }
+}
+
+function _addDivChild(parent, className, html) {
+  const div = document.createElement("div");
+  div.className = className;
+  div.innerHTML = html;
+  parent.appendChild(div);
+}
 
 async function _handleOnSelectMovieChanged(event) {
   // Obtenir el valor del selector que conté la ID
@@ -74,8 +170,10 @@ async function _handleOnSelectMovieChanged(event) {
   );
 
   // Ex4
-  const result = await swapi.getMovieCharactersAndHomeworlds(movieID);
-  const homeworldsTrobats = result.characters.map(({ homeworld }) => homeworld);
+  currentInfoDisplay = await swapi.getMovieCharactersAndHomeworlds(movieID);
+  const homeworldsTrobats = currentInfoDisplay.characters.map(
+    ({ homeworld }) => homeworld
+  );
   const planetsNonRepeat = new Set(homeworldsTrobats);
   // Podríem tornar a convertir el Set a Array amb [...mySet] o Array.from(mySet)
 
